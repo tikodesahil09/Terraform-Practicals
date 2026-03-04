@@ -1,4 +1,4 @@
-Practical No 1 
+## Practical No 1 
 
 //using iam user credentials
 provider "aws" {
@@ -6,9 +6,7 @@ provider "aws" {
   access_key = "xyz"
   secret_key = "abc"
 }
-
 OR
-
 //using attach iam role
 provider "aws" {
   region = "eu-north-1"
@@ -26,3 +24,20 @@ resource "aws_instance" "first-example" {
 
 END
 
+
+## Practical no 2
+
+provider "aws" {
+  region = "eu-north-1"
+}
+
+// Create 3 ec2 instance
+resource "aws_instance" "first-example" {
+  ami = "ami-073130f74f5ffb161"
+  instance_type = "t3.micro"
+
+  count = 3
+  tags = {
+    Name = "example${count.index +1}"
+  }
+}
