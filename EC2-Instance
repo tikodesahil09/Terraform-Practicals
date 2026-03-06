@@ -107,4 +107,8 @@ resource "aws_security_group" "first-sg" {
     protocol = "-1"
     cidr_blocks = [ "0.0.0.0/0" ]
   }
+/*if when sg-name has change still destroying prccess to use - 
+  lifecycle {
+    create_before_destroy = true
+  }*/
 }
