@@ -1,0 +1,36 @@
+##Practical 4
+
+// Create New VPC
+provider "aws" {
+  region = "eu-north-1"
+}
+
+resource "aws_vpc" "newvpc" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "my-vpc"
+  }
+}
+
+##Practical 5
+
+// Creata New Subnet using to existing VPC_Id
+provider "aws" {
+  region = "eu-north-1"
+}
+
+resource "aws_vpc" "newvpc" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "my-vpc"
+  }
+}
+
+resource "aws_subnet" "private-sub" {
+  vpc_id = "vpc-08cf4b89f41118a35"
+  cidr_block = "10.0.0.0/20"
+  tags = {
+    Name = "my-subnet"
+  }
+}
+
