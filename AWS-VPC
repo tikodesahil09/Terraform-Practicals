@@ -1,4 +1,4 @@
-##Practical 4
+## Practical 4
 
 // Create New VPC
 provider "aws" {
@@ -12,9 +12,13 @@ resource "aws_vpc" "newvpc" {
   }
 }
 
-##Practical 5
 
-// Creata New Subnet using to existing VPC_Id
+######
+
+
+## Practical 5
+
+// Creata New Subnet using to existing VPC_ID
 provider "aws" {
   region = "eu-north-1"
 }
@@ -33,4 +37,152 @@ resource "aws_subnet" "private-sub" {
     Name = "my-subnet"
   }
 }
+
+
+######
+
+
+## Practical 6
+
+// Create 2 New Subnet using to existing VPC_ID
+provider "aws" {
+  region = "eu-north-1"
+}
+
+resource "aws_vpc" "newvpc" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "my-vpc"
+  }
+}
+
+resource "aws_subnet" "public-sub" {
+  vpc_id = aws_vpc.newvpc.id
+  cidr_block = "10.0.1.0/24"
+  tags = {
+    Name = "public-subnet"
+  }
+}
+
+resource "aws_subnet" "private-sub" {
+  vpc_id = aws_vpc.newvpc.id
+  cidr_block = "10.0.2.0/24"
+  tags = {
+    Name = "private-subnet"
+  }
+}
+
+
+######
+
+
+## Practical 7
+
+// Create Internate Gateway (igw) using existing VPC_ID
+provider "aws" {
+  region = "eu-north-1"
+}
+
+resource "aws_vpc" "newvpc" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "my-vpc"
+  }
+}
+
+resource "aws_internet_gateway" "new-igw" {
+  vpc_id = aws_vpc.newvpc.id
+  tags = {
+    Name = "my-igw"
+  }
+}
+
+
+######
+
+
+## Practical 8
+
+# Default Route Table Associate with subnet(eg-public-subnet)
+provider "aws" {
+  region = "eu-north-1"
+}
+
+resource "aws_vpc" "newvpc" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "my-vpc"
+  }
+}
+
+resource "aws_subnet" "public-sub" {
+  vpc_id = aws_vpc.newvpc.id
+  cidr_block = "10.0.1.0/24"
+  tags = {
+    Name = "public-subnet"
+  }
+}
+
+resource "aws_internet_gateway" "new-igw" {
+  vpc_id = aws_vpc.newvpc.id
+  tags = {
+    Name = "my-igw"
+  }
+}
+
+// Default Route Table
+resource "aws_default_route_table" "new-rt" {
+  default_route_table_id = aws_vpc.newvpc.default_route_table_id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.new-igw.id
+  }
+  tags = {
+    Name = "new-route-table"
+  }
+}
+
+// Subnet Route Table Association
+resource "aws_route_table_association" "public-association" {
+  subnet_id      = aws_subnet.public-sub.id
+  route_table_id = aws_default_route_table.new-rt.id
+}
+
+OR
+
+
+#####
+
+
+## Practical 9
+
+# Custom or New Create Route Table Associate with subnet(eg-public-subnet)
+provider "aws" {
+  region = "eu-north-1"
+}
+
+resource "aws_vpc" "newvpc" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "my-vpc"
+  }
+}
+
+resource "aws_subnet" "public-sub" {
+  vpc_id = aws_vpc.newvpc.id
+  cidr_block = "10.0.1.0/24"
+  tags = {
+    Name = "public-subnet"
+  }
+}
+
+resource "aws_internet_gateway" "new-igw" {
+  vpc_id = aws_vpc.newvpc.id
+  tags = {
+    Name = "my-igw"
+  }
+}
+
+
 
