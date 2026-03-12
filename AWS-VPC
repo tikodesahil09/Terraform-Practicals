@@ -184,5 +184,26 @@ resource "aws_internet_gateway" "new-igw" {
   }
 }
 
+// Create Custom Route Table
+resource "aws_route_table" "public-rt" {
+  vpc_id = aws_vpc.newvpc.id
+
+  tags = {
+    Name = "public-route-table"
+  }
+}
+
+// Add Internet Gateway Route
+resource "aws_route" "internet-route" {
+  route_table_id         = aws_route_table.public-rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.new-igw.id
+}
+
+// Associate Public Subnet
+resource "aws_route_table_association" "public-subnet-association" {
+  subnet_id      = aws_subnet.public-sub.id
+  route_table_id = aws_route_table.public-rt.id
+}
 
 
