@@ -38,3 +38,9 @@ variable "sg" {
   default = [ "sg-0480ee3afa5758e19" ]
 }
 
+# when using terraform.tfvars file for Priority
+# high priority for terraform.tfvars file as compaire to variable.tf file
+
+# terraform.tfvars :-
+
+instance_type = "t3.small"
