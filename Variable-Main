@@ -1,0 +1,40 @@
+### Practical No - 1
+
+# main.tf :-
+
+provider "aws" {
+  region = var.region
+}
+
+resource "aws_instance" "my-ec2" {
+  ami = var.image
+  instance_type = var.instance_type
+  key_name = var.key-pair
+  vpc_security_group_ids = var.sg
+  tags = {
+    Name = "my-instance"
+  }
+}
+
+# variable.tf :-
+
+variable "region" {
+  default = "eu-north-1"
+}
+# when using runtime value
+variable "image" {
+  description = "image id"
+  /*Otherwise 
+  default = "ami-0aaa636894689fa47" 
+  */
+}
+variable "instance_type" {
+  default = "t3.micro"
+}
+variable "key-pair" {
+  default = "jenkins"
+}
+variable "sg" {
+  default = [ "sg-0480ee3afa5758e19" ]
+}
+
