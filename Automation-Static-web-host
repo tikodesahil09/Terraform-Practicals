@@ -1,0 +1,67 @@
+## 1) instance.tf :
+
+provider "aws" {
+  region = var.region_name
+}
+
+resource "aws_instance" "fctsahil" {
+  ami = var.image
+  instance_type = var.instance_type
+  key_name = var.key-pair
+  vpc_security_group_ids = [ aws_security_group.first-sg.id ]
+  user_data = <<-EOF
+              #!/bin/bash
+              yum install httpd -y
+              systemctl start httpd
+              systemctl enable httpd
+              echo "<h1> This is user-data inside terraform file</h1>" > /var/www/html/index.html
+              EOF
+  tags = {
+    Name = "user-data"
+  }
+}
+
+// Create sg & add port 22 and port 80
+resource "aws_security_group" "first-sg" {
+  ingress {
+    description = "allow ssh"
+    to_port = 22
+    from_port = 22
+    protocol = "tcp"
+    cidr_blocks = [ "0.0.0.0/0" ]
+  }
+   
+  ingress {
+    description = "allow http"
+    to_port = 80
+    from_port = 80
+    protocol = "tcp"
+    cidr_blocks = [ "0.0.0.0/0" ]
+  }
+    egress {
+    description = "allow all ports"
+    to_port = 0
+    from_port = 0
+    protocol = "-1" #Allow All Outbound traffic
+    cidr_blocks = [ "0.0.0.0/0" ]
+  }
+}
+
+## 2) variable.tf :
+
+variable "region_name" {
+  default = "eu-north-1"
+}
+
+variable "image" {
+  default = "ami-056335ec4a8783947"
+}
+
+variable "instance_type" {
+  default = "t3.micro"
+}
+
+variable "key-pair" {
+  default = "jenkins"
+}
+
