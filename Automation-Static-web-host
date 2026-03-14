@@ -65,3 +65,9 @@ variable "key-pair" {
   default = "jenkins"
 }
 
+## 3) output.tf :
+
+// Use for public ip
+output "public-ip" {
+  value = aws_instance.fctsahil.public_ip
+}
