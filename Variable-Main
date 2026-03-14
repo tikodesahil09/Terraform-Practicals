@@ -38,9 +38,24 @@ variable "sg" {
   default = [ "sg-0480ee3afa5758e19" ]
 }
 
-# when using terraform.tfvars file for Priority
-# high priority for terraform.tfvars file as compaire to variable.tf file
+### Priority :
+
+# 1) when using terraform.tfvars file for +Priority
+# "terraform.tfvars" file has high priority than "variable.tf" file
 
 # terraform.tfvars :-
 
 instance_type = "t3.small"
+
+# 2) when using terraform.auto.tfvars file for ++Priority
+# "terraform.auto.tfvars" has higher priority than both terraform.tfvars file and variable.tf
+
+# terraform.auto.tfvars :-
+
+instance_type = "t3.medium"
+
+# 3) when using runtime command for highest +++Priority
+# Highest Priority above All
+
+# Command :-
+  terraform apply -var "instance_type=c7i-flex.large"
