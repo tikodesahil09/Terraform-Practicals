@@ -22,7 +22,19 @@ resource "aws_instance" "first-example" {
   }
 }
 
+/*
+Steps :
+  1.Install Terraform
+  2.Create any directory
+  3.Create this instance.tf file any directory
+  4.Write This Script in instance.tf file
+Command :
+  git init
+  git plan
+  git apply --auto-approve
+
 END
+*/
 
 
 # Create Multiple Instances
@@ -104,7 +116,7 @@ resource "aws_security_group" "first-sg" {
     description = "allow all ports"
     to_port = 0
     from_port = 0
-    protocol = "-1"
+    protocol = "-1" #Allow All Outbound traffic
     cidr_blocks = [ "0.0.0.0/0" ]
   }
 /*if when sg-name has change still destroying prccess to use - 
