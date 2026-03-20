@@ -1,0 +1,71 @@
+# Practical 01
+
+## 1) main.tf
+
+provider "aws" {
+  region = var.region
+}
+
+resource "aws_instance" "new-ec2" {
+  ami = var.image
+  instance_type = var.instance_type
+  vpc_security_group_ids = var.sg 
+  tags = {
+    Name = "server1"
+  }
+}
+
+
+## 2) variable.tf
+
+variable "region" {
+  default = "eu-north-1"
+}
+variable "image" {
+  default = "ami-0aaa636894689fa47"
+}
+variable "instance_type" {
+  default = "t3.micro"
+}
+variable "sg" {
+  default = ["sg-0480ee3afa5758e19"]
+}
+
+Now, i have manually created security group.
+    (name-terra-sg; discrep- allow ssh,http; inbound- ssh 0.0.0.0/0 , http 0.0.0.0/0)
+this security group attach for existing instance ,then we have use "data" block
+
+## 1) main.tf :
+
+provider "aws" {
+  region = var.region
+}
+
+resource "aws_instance" "new-ec2" {
+  ami = var.image
+  instance_type = var.instance_type
+  vpc_security_group_ids = [data.aws_security_group.my-sg.id]
+  tags = {
+    Name = "server1"
+  }
+}
+
+//data-block
+data "aws_security_group" "my-sg" {
+  name = "terra-sg"
+  vpc_id = "vpc-0edb574a177a7cdc3"
+}
+
+## 2) variable.tf :
+
+variable "region" {
+  default = "eu-north-1"
+}
+variable "image" {
+  default = "ami-0aaa636894689fa47"
+}
+variable "instance_type" {
+  default = "t3.micro"
+}
+
+
