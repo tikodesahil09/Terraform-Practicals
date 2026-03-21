@@ -31,9 +31,9 @@ variable "sg" {
   default = ["sg-0480ee3afa5758e19"]
 }
 
-Now, i have manually created security group.
+## Now, i have manually created security group.
     (name-terra-sg; discrep- allow ssh,http; inbound- ssh 0.0.0.0/0 , http 0.0.0.0/0)
-this security group attach for existing instance ,then we have use "data" block
+## this security group attach for existing instance ,then we have use "data" block
 
 ## 1) main.tf :
 
@@ -68,4 +68,56 @@ variable "instance_type" {
   default = "t3.micro"
 }
 
+
+# Practical 02
+
+#first destroy everything (my-sg not deleted because he creates manually)
+#If you want to allow Terraform to manage this manually created security group, you will need to perform the following steps:
+# using with "terraform import"
+# second create new directory and then run terraform init command and also create following .tf files:
+
+## 1) main.tf
+
+provider "aws" {
+  region = var.region
+}
+
+resource "aws_instance" "new-ec2" {
+  ami = var.image
+  instance_type = var.instance_type
+  vpc_security_group_ids = [aws_security_group.my-sg.id]
+  tags = {
+    Name = "server1"
+  }
+}
+
+
+resource "aws_security_group" "my-sg" {
+  name = "terra-sg"
+  vpc_id = "vpc-0edb574a177a7cdc3"
+}
+
+## 2) variable.tf 
+
+variable "region" {
+  default = "eu-north-1"
+}
+variable "image" {
+  default = "ami-0aaa636894689fa47"
+}
+variable "instance_type" {
+  default = "t3.micro"
+}
+
+# Command : 
+ 1) terraform import aws_security_group.my-sg sg-0b3451d0b6e90f98d
+ 2) terraform plan
+ 3) terraform apply --auto-approve
+
+# output : 
+# aws_security_group.my-sg must be replaced
+# "Managed by Terraform" # forces replacement
+
+// Now the Security Group ID will change because, Now Terraform will manage it
+  ( Before my-sg : sg-0b3451d0b6e90f98d After my-sg :sg-0d18ebce319bd414b )
 
