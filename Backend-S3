@@ -47,3 +47,12 @@ variable "instance_type" {
 
 # Then "terraform.tfstate" file and "terraform.tfstate.backup" file stored in s3 bucket
 
+
+# IMP Command Usage :-
+
+1) terraform state list
+    : list all resources currently tracked within the Terraform state file.
+
+2) terraform state show [resource_name]
+    :  It gives detailed information about your resource
+
