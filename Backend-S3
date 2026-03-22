@@ -54,5 +54,18 @@ variable "instance_type" {
     : list all resources currently tracked within the Terraform state file.
 
 2) terraform state show [resource_name]
-    :  It gives detailed information about your resource
+    : It give detail information about your "Single resource"
 
+3) terraform state mv [resource_name].[terraform_identifier_Old_Name]  [resource_name].[New_Name]
+    : The terraform state mv command is primarily used for refactoring Terraform configurations 
+        without causing disruption to the existing infrastructure. 
+
+4) terraform state pull
+    : It show detailed information of "All resources"
+
+5) terraform state rm [resource_name]
+    : removes a resource from Terraform's state file 
+        without destroying the actual, corresponding real-world infrastructure object.
+      The object continues to exist, but Terraform will no longer manage it.
+        (This means that if you delete a resource, terraform cannot manage the object created by it.)
+      [ex- after this command, the terraform destroy command will not run]
